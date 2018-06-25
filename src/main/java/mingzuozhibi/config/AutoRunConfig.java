@@ -1,8 +1,9 @@
 package mingzuozhibi.config;
 
+import mingzuozhibi.action.BmoeController;
 import mingzuozhibi.service.AmazonScheduler;
-import mingzuozhibi.service.ScheduleMission;
 import mingzuozhibi.service.SakuraSpeedSpider;
+import mingzuozhibi.service.ScheduleMission;
 import mingzuozhibi.support.Dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ public class AutoRunConfig {
      * call by MzzbServerApplication
      */
     public void runStartupServer() {
+        fetchBmoeCurrent();
         fetchSakuraSpeedData(3, true);
         scheduleMission.removeExpiredDiscsFromList();
         scheduleMission.removeExpiredAutoLoginData();
@@ -85,6 +87,11 @@ public class AutoRunConfig {
     @Scheduled(cron = "40 0/2 * * * ?")
     public void fetchAmazonData() {
         scheduler.fetchData();
+    }
+
+    @Scheduled(cron = "0 1,31 * * * ?")
+    public void fetchBmoeCurrent() {
+        BmoeController.fetchCurrent();
     }
 
 }
